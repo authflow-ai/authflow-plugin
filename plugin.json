@@ -1,0 +1,38 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "authflow",
+  "version": "0.6.0",
+  "description": "Put your MCP server on Authflow: paid subscriptions with credits, or free access, through one OAuth sign-in, with the agent doing the setup. Connects the Authflow MCP, which serves Authflow's setup workflows and docs to signed-in agents, and adds skills to onboard, publish, configure tools, check health, operate, and report problems to Authflow.",
+  "author": {
+    "name": "Authflow LLC",
+    "url": "https://authflow.ai"
+  },
+  "homepage": "https://authflow.ai",
+  "repository": "https://github.com/authflow-ai/authflow-plugin",
+  "license": "Apache-2.0",
+  "keywords": ["mcp", "oauth", "monetization", "stripe", "authflow"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Authflow",
+        "shortDescription": "Charge for your MCP server, or offer it free, with Authflow",
+        "longDescription": "Connects the Authflow MCP (sign in with Google or GitHub), which serves Authflow's setup workflows and documentation once you are signed in. Skills run those workflows: creating a paid MCP with a monthly subscription and credits, or a free one, putting your server behind Authflow with the origin proxy or an in-process verifier, connecting Stripe, verifying, setting each tool's access and credits, and publishing with your approval. The agent can also check an MCP's health with Authflow's hosted doctor, report usage and earnings, and report problems to the Authflow team.",
+        "developerName": "Authflow LLC",
+        "category": "Coding",
+        "capabilities": ["Read", "Write"],
+        "websiteURL": "https://authflow.ai",
+        "privacyPolicyURL": "https://authflow.ai/privacy",
+        "termsOfServiceURL": "https://authflow.ai/terms-of-service",
+        "defaultPrompt": [
+          "Use Authflow to charge for this repository's MCP server with a monthly subscription and credits.",
+          "Use Authflow to check what is still blocking my MCP from going live.",
+          "Use Authflow to put this repository's MCP server behind a free Authflow sign-in."
+        ],
+        "brandColor": "#1B33CA",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png"
+      },
+      "onboardingSkill": "./skills/onboard/SKILL.md"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "authflow": {
+      "type": "streamable-http",
+      "url": "https://rails.authflow.ai/management/mcp",
+      "headers": {
+        "Authflow-Plugin-Version": "0.6.0",
+        "Authflow-Plugin-Client": "agent-plugins"
+      }
+    }
+  }
+}

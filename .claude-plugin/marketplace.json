@@ -1,0 +1,18 @@
+{
+  "name": "authflow",
+  "owner": {
+    "name": "Authflow LLC",
+    "url": "https://authflow.ai"
+  },
+  "metadata": {
+    "description": "Authflow's plugin for onboarding MCP servers onto the Authflow rail."
+  },
+  "plugins": [
+    {
+      "name": "authflow",
+      "source": "./",
+      "description": "Connect the Authflow MCP (with setup workflows and docs for signed-in agents), put your MCP server on Authflow as a paid or free MCP, publish it, set each tool's credits and access, check its health, and report problems to Authflow.",
+      "category": "development"
+    }
+  ]
+}

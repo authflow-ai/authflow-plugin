@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "authflow": {
+      "type": "http",
+      "url": "https://rails.authflow.ai/management/mcp",
+      "headers": {
+        "Authflow-Plugin-Version": "0.6.0",
+        "Authflow-Plugin-Client": "claude-code"
+      }
+    }
+  }
+}
