@@ -1,71 +1,103 @@
 # Authflow plugin
 
-Put your MCP server on [Authflow](https://authflow.ai) and charge for it. Consumers get one OAuth sign-in and a paid Stripe subscription with credits, or free access. Your coding agent does the setup.
+Give your MCP server sign-in, paid access, or access just for you with [Authflow](https://authflow.ai). Install the plugin, tell your chat or coding agent what you want, and let it guide the setup.
 
-The plugin connects the **Authflow MCP** to your AI assistant so you can set up and manage **your MCP**. The Authflow MCP is for you and your assistant; your MCP is the server your customers connect to. The plugin also adds skills for setup and everyday tasks:
+The plugin connects the **Authflow MCP** and adds workflow skills. You and your assistant use the Authflow MCP to set up and manage **your MCP**; your customers connect to your MCP.
 
-| MCP server | URL | Auth |
-| --- | --- | --- |
-| Authflow MCP (`authflow`) | `https://rails.authflow.ai/management/mcp` | Sign in with Google or GitHub in the browser |
+## Install Authflow
 
-The steps live on Authflow, not in the plugin. Each skill connects the Authflow MCP (`authflow`), reads Authflow's matching workflow with `authflow_get_prompt`, and follows it, so the steps stay current without a plugin update. The skills keep only the rules that must hold whatever the workflow says.
+Paste this into your chat or coding agent:
 
-| Skill | Authflow workflow | What it does |
-| --- | --- | --- |
-| `onboard` | `setup_mcp` | Create a paid or free MCP, integrate your server, connect Stripe, verify, and set tool credits |
-| `publish` | `publish_mcp` | Verify, publish once you say yes, and test through the gateway URL like a real consumer |
-| `doctor` | `diagnose_mcp` | Run Authflow's hosted health check, fix what it finds, and explain what is left |
-| `configure-tools` | `configure_tools` | Each tool's credits per call, who can call it, and per-user limits, tested before they are enforced |
-| `operate` | `earnings_report` | Usage and earnings, renaming, offer changes, disabling, health sweeps |
-| `feedback` | `authflow_send_feedback` | Report a bug, docs gap, missing tool, or your own message to the Authflow team |
+> Install the Authflow plugin from https://github.com/authflow-ai/authflow-plugin and help me charge for access to my MCP. Handle the setup and guide me through anything I need to do. Show me the result before publishing.
 
-## Install
+Change the goal to offer your MCP free to anyone signed in, keep it just for your account, or build a new MCP from an idea.
 
-Turn on auto-update where your client offers it, so skill fixes reach you without asking. [Updating](#updating) covers updating by hand.
+Your agent handles installation and guides you through sign-in. If your app needs a confirmation or a new chat, follow the agent’s next step.
+
+<details>
+<summary>Installation details for agents and manual setup</summary>
+
+### For the agent installing this plugin
+
+1. Use your current app and available installation controls to choose the matching section below. Reuse an installed Authflow plugin; do not add duplicate connections.
+2. Handle source registration and plugin installation for the user. Some apps call a plugin source a “marketplace”; registering this source only connects the app to Authflow and does not publish anything. Source registration alone does not install the plugin.
+3. Help the user complete Authflow sign-in in their browser. Confirm the connection with `authflow_list_workspaces`; a saved configuration alone does not confirm it is ready.
+4. If a reload or new chat is required, give the user the exact next step and a short continuation prompt containing this repository URL and their original goal.
+5. Once connected, use the plugin’s onboarding skill and follow the workflow it retrieves. Let that workflow guide the setup and ask for decisions when needed.
+
+If the current app cannot install plugins, use its supported connection route below or explain the next step in a supported app. Some chats cannot edit or deploy a project; guide that handoff when needed. Never ask the user to paste credentials into chat.
+
+Use the instructions for the current app and version. Turn on auto-update where supported.
+
+### Codex
+
+Connect Codex to the Authflow plugin source from a terminal:
+
+```bash
+codex plugin marketplace add authflow-ai/authflow-plugin
+```
+
+Then install the plugin. If `codex plugin --help` lists `add`, run:
+
+```bash
+codex plugin add authflow@authflow
+```
+
+Otherwise open `/plugins`, select Authflow, and install it. Confirm that the plugin is installed, not just listed as an available source.
+
+When available, `codex plugin list --marketplace authflow --json` can confirm installation. Complete the Authflow sign-in prompt. Start a new chat if the current chat does not expose the plugin’s tools, then continue the original goal.
+
+If the CLI is needed but missing, follow the [Codex CLI installation instructions](https://developers.openai.com/codex/cli). [Plugin and marketplace documentation](https://developers.openai.com/plugins/build/plugins).
 
 ### Claude Code
+
+In Claude Code 2.1.275 or later, install Authflow with:
+
+```text
+/plugin install authflow --marketplace https://github.com/authflow-ai/authflow-plugin
+```
+
+The command connects the source and opens the installation details. Confirm the install scope when prompted.
+
+From a terminal, Claude Code 2.1.292 or later supports:
+
+```bash
+claude plugin install authflow --marketplace https://github.com/authflow-ai/authflow-plugin
+```
+
+On older versions, use these two commands inside Claude Code:
 
 ```text
 /plugin marketplace add authflow-ai/authflow-plugin
 /plugin install authflow@authflow
 ```
 
-Then run `/mcp`, select `authflow`, and authenticate.
-
-Turn on auto-update with `/plugin`, **Marketplaces**, `authflow`, **Enable auto-update**. Or declare the marketplace in `~/.claude/settings.json` with auto-update on:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "authflow": {
-      "source": { "source": "github", "repo": "authflow-ai/authflow-plugin" },
-      "autoUpdate": true
-    }
-  }
-}
-```
-
-### Codex
+Or from a terminal:
 
 ```bash
-codex plugin marketplace add authflow-ai/authflow-plugin
+claude plugin marketplace add authflow-ai/authflow-plugin
+claude plugin install authflow@authflow
 ```
 
-Then install `authflow` from `/plugins`, and sign in to the Authflow MCP (`authflow`) when prompted.
+Follow the install result: if the plugin is not active yet, use `/reload-plugins` when supported or start a new session. Run `/mcp`, select `authflow`, and authenticate.
+
+Enable auto-update through `/plugin` → **Marketplaces** → **authflow** → **Enable auto-update**. [Claude Code installation documentation](https://code.claude.com/docs/en/discover-plugins#add-a-marketplace-and-install-in-one-command).
 
 ### Gemini CLI
+
+Run this from a terminal, outside the Gemini CLI conversation:
 
 ```bash
 gemini extensions install https://github.com/authflow-ai/authflow-plugin --auto-update
 ```
 
-Then run `/mcp auth authflow`.
+Restart Gemini CLI so the extension loads. Then run `/mcp auth authflow` and complete browser sign-in. Continue with the goal you selected before installation. [Gemini extension documentation](https://geminicli.com/docs/extensions/reference/).
 
 ### Cursor
 
-Teams and Enterprise workspaces can import this repository as a team marketplace (**Dashboard → Plugins & MCPs → Import from Repo**). Cursor reads the root `plugin.json` and `mcp.json`.
+Teams and Enterprise workspaces can import this repository as a team marketplace through **Dashboard → Plugins & MCPs → Import from Repo**. Use `https://github.com/authflow-ai/authflow-plugin`, then install Authflow from the available plugins. An administrator may need to import it. Cursor reads the root `plugin.json` and `mcp.json`.
 
-On other plans, add the server to `~/.cursor/mcp.json` until the plugin is listed in the Cursor Marketplace:
+If the plugin is unavailable in your workspace, you can connect the Authflow MCP through Cursor’s MCP settings. Merge this entry into the existing `mcpServers` object in `~/.cursor/mcp.json`; preserve other connections:
 
 ```json
 {
@@ -75,49 +107,59 @@ On other plans, add the server to `~/.cursor/mcp.json` until the plugin is liste
 }
 ```
 
+This fallback connects the MCP without installing the plugin’s skills. Complete sign-in in Cursor’s MCP settings. The agent can then request the hosted onboarding workflow directly with `authflow_get_prompt`, using `name: "setup_mcp"`, and follow the returned instructions for your goal. [Cursor plugin documentation](https://cursor.com/docs/plugins).
+
+### Other chats and agent apps
+
+Use your app’s supported plugin installer when it accepts this repository. If it supports remote MCP connections instead, add `https://rails.authflow.ai/management/mcp` and complete browser sign-in.
+
+An MCP-only connection does not install the plugin’s skills. Connected agents can use the hosted workflows through `authflow_get_prompt`, beginning with `setup_mcp`. If the app lacks plugin or remote MCP support, continue in a supported app.
+
+</details>
+
 ## Use it
 
-Open the repository that contains your MCP server and ask:
+Open your MCP’s project if you have one and tell your agent what you want:
 
-> Put this MCP server on Authflow as a paid MCP named "My MCP" with slug `my-mcp`, $9 a month with 12 credits. Show me the result before publishing.
+- “Help me charge for access to my MCP.”
+- “Help me share my MCP for free with anyone who signs in.”
+- “Help me make my MCP free and available only to my account.”
+- “Help me build an MCP from an idea. Start by asking what I want it to do.”
 
-Ask for a free MCP instead when consumers should only sign in. The agent never needs a key or token from you. You complete sign-in, consent, and Stripe in the browser, and, for a paid MCP whose server reports its own usage, the one-time origin key reveal in the Authflow portal. Publishing always waits for your confirmation.
+The plugin’s onboarding workflow guides the details. You complete sign-in and any Stripe steps in your browser. Publishing waits for your confirmation.
 
-Ask "Is my MCP on Authflow healthy?" at any time. The `doctor` skill runs Authflow's hosted checks and tells you what to fix and who has to fix it: the agent, you (DNS, Stripe, deploys), or Authflow.
+You host and run your own MCP server. If you are starting from an idea, your agent helps you build it and choose where it runs.
 
-The same workflows are the Authflow MCP's prompts, which most clients also list in their `/` menu: `setup_mcp`, `publish_mcp`, `diagnose_mcp`, `configure_tools`, and `earnings_report`.
+Ask “Is my MCP healthy?” whenever you need help. The doctor skill explains what needs attention and who can handle it.
+
+## Workflows
+
+The detailed steps live on Authflow. Each skill retrieves the current workflow with `authflow_get_prompt`, so setup instructions can stay current without a plugin update.
+
+| Skill | Authflow workflow | What it does |
+| --- | --- | --- |
+| `onboard` | `setup_mcp` | Set up your MCP with free or paid access |
+| `publish` | `publish_mcp` | Verify, publish after your approval, and test your MCP |
+| `doctor` | `diagnose_mcp` | Check health and guide fixes |
+| `configure-tools` | `configure_tools` | Set tool access, credits and limits |
+| `operate` | `earnings_report` | Check usage and earnings and manage existing MCPs |
+| `feedback` | `authflow_send_feedback` | Report a problem or send feedback to Authflow |
 
 ## Updating
 
-The plugin's MCP configs send two request headers, `Authflow-Plugin-Version` and `Authflow-Plugin-Client`, so Authflow can tell users when an update exists. When your plugin is out of date, the Authflow MCP tells your agent once, and the agent passes on how to update. Updates apply in a new session.
+Ask your agent to update the Authflow plugin and follow any reload or sign-in instructions.
 
-### Claude Code
+<details>
+<summary>Update instructions for agents and manual setup</summary>
 
-```bash
-claude plugin update authflow@authflow
-```
+The plugin identifies its client and version to Authflow so your agent can tell you when an update is available.
 
-Or `/plugin`, **Installed**, `authflow`, **Update**. Then start a new session. With auto-update on, Claude Code fetches new versions itself; they still apply in a new session.
+- **Codex:** run `codex plugin marketplace upgrade authflow`, then install or refresh Authflow through `codex plugin add authflow@authflow` when supported, or `/plugins`. Start a new chat to use the updated plugin.
+- **Claude Code:** run `claude plugin update authflow@authflow`, or use `/plugin` → **Installed** → **authflow** → **Update**. Follow the update result; use `/reload-plugins` or start a new session if needed.
+- **Gemini CLI:** run `gemini extensions update authflow`, then restart Gemini CLI. Auto-updated extensions also load after a restart.
+- **Cursor:** a team admin refreshes the marketplace, then users reload the Cursor window. An MCP-only connection has no plugin package to update.
 
-### Codex
-
-1. Quit Codex.
-2. Run `codex plugin marketplace upgrade authflow`, then `codex plugin add authflow@authflow`.
-3. Start a new thread.
-
-`codex mcp list` should then show one `authflow` row with the Authflow MCP URL.
-
-### Gemini CLI
-
-```bash
-gemini extensions update authflow
-```
-
-Then restart Gemini CLI. Extensions installed with `--auto-update` update themselves; the new version also applies after a restart.
-
-### Cursor
-
-A team admin refreshes the Authflow team marketplace in the Cursor dashboard. Then reload the Cursor window. A server added by hand to `~/.cursor/mcp.json` has no plugin to update.
+</details>
 
 ## Feedback
 
