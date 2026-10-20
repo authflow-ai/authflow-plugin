@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.2
+
+- A live MCP can move to your own hostname, or back to its Authflow address, without going out of live and without losing subscribers, credits or installed connectors: the `operate` skill no longer says a hostname is fixed after the first publish, and names `authflow_use_authflow_address` for moving back.
+- Explain `primary_serving: false`: a lapsed primary hostname stops only itself, and the MCP keeps serving at its other addresses meanwhile.
+- Requires an Authflow release that includes resource addresses (ADR-014).
+- Manifests: version 0.6.2.
+
 ## 0.6.1
 
 - Start installation with one prompt to your chat or coding agent. Keep client-specific setup and update commands in expandable instructions.

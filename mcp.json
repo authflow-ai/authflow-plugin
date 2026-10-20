@@ -5,7 +5,7 @@
       "type": "streamable-http",
       "url": "https://rails.authflow.ai/management/mcp",
       "headers": {
-        "Authflow-Plugin-Version": "0.6.1",
+        "Authflow-Plugin-Version": "0.6.2",
         "Authflow-Plugin-Client": "agent-plugins"
       }
     }
